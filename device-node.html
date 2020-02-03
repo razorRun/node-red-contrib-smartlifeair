@@ -1,0 +1,214 @@
+<script type="text/javascript">
+  RED.nodes.registerType("device-node", {
+    category: "SmartLife Air",
+    color: "#a6bbcf",
+    defaults: {
+      name: { value: "" },
+      account: { value: "", type: "smartlifeair-login", required: true },
+      selectedDevice: { value: "", required: true },
+      selectedInput: { value: "", required: false },
+      selectedOutput: { value: "", required: false }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "light.png",
+    label: function() {
+      return this.name || "Device Node";
+    },
+    oneditprepare: function() {
+      loadDeviceDropDown(
+        this.account,
+        this.selectedDevice,
+        this.selectedInput,
+        this.selectedOutput
+      );
+    }
+  });
+</script>
+
+<script type="text/html" data-template-name="device-node">
+  <div class="form-row">
+    <label for="node-input-name">Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <br>
+  <div class="form-row">
+    <label for="node-input-account">Linked Account</label>
+    <input type="text" id="node-input-account" placeholder="Device Node">
+  </div>
+  <br>
+  <p><b>NOTE : </b>Please operate (trigger a status change using device it self or using SmartLife Air app)</p><p>the device at least once before you select it.</p>
+  <div class="form-row">
+    <label for="node-input-selectedDevice"> Select Device</label>
+    <select id="node-input-selectedDevice" name="node-input-selectedDevice">
+    </select>
+  </div>
+  <br>
+  <div class="form-row">
+    <label for="node-input-selectedInput"> Select Input</label>
+    <select id="node-input-selectedInput" name="node-input-selectedInput">
+    </select>
+  </div>
+  <br>
+  <div class="form-row">
+    <label for="node-input-selectedOutput"> Select Output</label>
+    <select id="node-input-selectedOutput" name="node-input-selectedOutput">
+    </select>
+    <p><b>NOTE : </b>You will receive updates whenever selected Channel get updated.</p>
+    <p> If you select ALL Channels, it will output a complete snapshot of all output Channels on this device.</p>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="device-node">
+  <p>A simple node that allows you to communicate with devices enrolled to SmartLife Air App.</p>
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-database.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBnbSCjJ9eQtAMl_CHRSJxelF5XG8UlLjU",
+    authDomain: "smartlife-air.firebaseapp.com",
+    databaseURL: "https://smartlife-air.firebaseio.com",
+    projectId: "smartlife-air",
+    storageBucket: "smartlife-air.appspot.com",
+    messagingSenderId: "121967033816",
+    appId: "1:121967033816:web:222bbc68de21111ac0c6ad",
+    measurementId: "G-YHBTVPG19R"
+  };
+
+  const loadDeviceDropDown = (
+    account,
+    selectedDevice,
+    selectedInput,
+    selectedOutput
+  ) => {
+    let configNode = RED.nodes.node(account); // Get the config node
+    deviceSelectionEl = $("#node-input-selectedDevice");
+    deviceSelectionEl.append('<option value="">Loading...</option>');
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    //Authenticating with firebase
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(configNode.email, configNode.password)
+      .catch(error => {
+        // Handle Errors here.
+        console.log(error.message);
+      });
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        console.log("User Authenticated as " + user.email);
+
+        //DB USER PATHS
+        let userDevicesPath = firebase
+          .database()
+          .ref("/users/" + user.uid + "/smartlifeAirUserDevices");
+
+        userDevicesPath.once("value").then(data => {
+          deviceSelectionEl.children().remove();
+          deviceList = data.val();
+
+          if (Object.keys(deviceList).length === 0) {
+            deviceSelectionEl.append('<option value="">No devices</option>');
+          } else {
+            Object.keys(deviceList).forEach(deviceId => {
+              deviceSelectionEl.append(
+                '<option value="' +
+                  deviceId +
+                  '">' +
+                  deviceList[deviceId] +
+                  " ==> ID:" +
+                  deviceId +
+                  "</option>"
+              );
+            });
+            // Register listener to listen to device dropdown
+            deviceSelectionEl.change(e => {
+              if (deviceSelectionEl.val()) {
+                //Firebase reference to selected device
+                let devicePath = firebase
+                  .database()
+                  .ref("/devices/" + deviceSelectionEl.val());
+
+                devicePath.once("value").then(data => {
+                  loadInputs(data.val(), selectedInput);
+                  loadOutputs(data.val(), selectedOutput);
+                });
+              }
+            });
+            if (selectedDevice) {
+              deviceSelectionEl.val(selectedDevice);
+              deviceSelectionEl.trigger("change");
+            }
+          }
+        });
+      } else {
+        console.log("Authentication Pending or error in user credentials.");
+      }
+    });
+  };
+
+  //Load input drop down
+  const loadInputs = (inputs, selectedInput) => {
+    selectedInputEl = $("#node-input-selectedInput");
+    selectedInputEl.children().remove();
+    if (inputs && inputs.functions) {
+      Object.keys(inputs.functions).forEach(code => {
+        selectedInputEl.append(
+          '<option value="' +
+            code +
+            '">' +
+            code +
+            " ==> Values:" +
+            inputs.functions[code].type +
+            " " +
+            inputs.functions[code].values +
+            "</option>"
+        );
+      });
+      if (selectedInput) {
+        selectedInputEl.val(selectedInput);
+        selectedInputEl.trigger("change");
+      }
+    } else {
+      // Functions list is empty
+      selectedInputEl.append('<option value="">No Available Inputs</option>');
+    }
+  };
+
+  //Load Output drop down
+  const loadOutputs = (outputs, selectedOutput) => {
+    selectedOutputEl = $("#node-input-selectedOutput");
+    selectedOutputEl.children().remove();
+    if (outputs && outputs.status) {
+      Object.keys(outputs.status).forEach(code => {
+        selectedOutputEl.append(
+          '<option value="' +
+            code +
+            '">' +
+            code +
+            " ==> Value:" +
+            outputs.status[code].value +
+            "</option>"
+        );
+      });
+      selectedOutputEl.append(
+        '<option value="root">All Output Channels as a JSON</option>'
+      );
+      if (selectedOutput) {
+        selectedOutputEl.val(selectedOutput);
+        selectedOutputEl.trigger("change");
+      }
+    } else {
+      selectedOutputEl.append('<option value="">No Available Inputs</option>');
+    }
+  };
+</script>

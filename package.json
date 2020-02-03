@@ -1,0 +1,25 @@
+{
+  "name": "smartlife-air-node-red",
+  "version": "0.0.1",
+  "description": "Allow you to intigrate any tuya, smartlife supported devices to node red. How ever you will have to enroll these devices via smartlife-air mobile app. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://roshan_osh@bitbucket.org/roshan_osh/smartlife-air-node-red.git"
+  },
+  "author": "Roshan Milinda",
+  "license": "GPL (GPLv3)",
+  "homepage": "https://bitbucket.org/roshan_osh/smartlife-air-node-red#readme",
+  "dependencies": {
+    "firebase": "^7.8.0"
+  },
+  "node-red": {
+    "nodes": {
+      "smartlife-air-login": "config.js",
+      "smartlife-air-device": "device-node.js"
+    }
+  }
+}
