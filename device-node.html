@@ -7,7 +7,8 @@
       account: { value: "", type: "smartlifeair-login", required: true },
       selectedDevice: { value: "", required: true },
       selectedInput: { value: "", required: false },
-      selectedOutput: { value: "", required: false }
+      selectedOutput: { value: "", required: false },
+      outputConversion: { value: "true", required: true }
     },
     inputs: 1,
     outputs: 1,
@@ -67,6 +68,14 @@
     <p><b>NOTE : </b>You will receive updates whenever selected Channel get updated.</p>
     <p> If you select ALL Channels, it will output a complete snapshot of all output Channels on this device.</p>
   </div>
+  <br>
+  <div class="form-row">
+    <label for="node-input-outputConversion"> Convert true/false to ON/OFF</label>
+    <select id="node-input-outputConversion" name="node-input-outputConversion">
+      <option value="true">YES</option>
+      <option value="false">NO</option>
+    </select>
+  </div>
 </script>
 
 <script type="text/html" data-help-name="device-node">
@@ -95,16 +104,12 @@
     measurementId: "G-YHBTVPG19R"
   };
 
-  const reload = () => {
-    console.log("Reload");
-  };
-
-  const loadDeviceDropDown = (
+  function loadDeviceDropDown(
     configNode,
     selectedDevice,
     selectedInput,
     selectedOutput
-  ) => {
+  ) {
     // Get the config node
     deviceSelectionEl = $("#node-input-selectedDevice");
     deviceSelectionEl.append('<option value="">Loading...</option>');
@@ -174,10 +179,10 @@
         console.log("Authentication Pending or error in user credentials.");
       }
     });
-  };
+  }
 
   //Load input drop down
-  const loadInputs = (inputs, selectedInput) => {
+  function loadInputs(inputs, selectedInput) {
     selectedInputEl = $("#node-input-selectedInput");
     selectedInputEl.children().remove();
     if (inputs && inputs.functions) {
@@ -202,10 +207,10 @@
       // Functions list is empty
       selectedInputEl.append('<option value="">No Available Inputs</option>');
     }
-  };
+  }
 
   //Load Output drop down
-  const loadOutputs = (outputs, selectedOutput) => {
+  function loadOutputs(outputs, selectedOutput) {
     selectedOutputEl = $("#node-input-selectedOutput");
     selectedOutputEl.children().remove();
     if (outputs && outputs.status) {
@@ -230,5 +235,5 @@
     } else {
       selectedOutputEl.append('<option value="">No Available Inputs</option>');
     }
-  };
+  }
 </script>

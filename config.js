@@ -21,27 +21,30 @@ module.exports = function(RED) {
     RED.nodes.createNode(this, n);
 
     // Initialize Firebase
-
-    if (!firebase.apps.length && n.email && n.password) {
+    if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
+    }
+    if (n.email && n.password) {
       this.auth = firebase.auth();
       this.db = firebase.database();
-
       this.auth.signInWithEmailAndPassword(n.email, n.password).catch(error => {
         // Handle Errors here.
         console.log(error.message);
       });
 
+      /*
       this.auth.onAuthStateChanged(function(user) {
         if (user) {
           // User is signed in.
 
-          this.uid = user.uid;
+          console.log(user.uid);
+
           // ...
         } else {
           // User is signed out.
         }
       });
+      */
     }
   }
   RED.nodes.registerType("smartlifeair-login", loginNode);

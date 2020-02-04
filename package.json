@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-smartlifeair",
-  "version": "0.0.5",
-  "description": "Allow you to intigrate any tuya, smartlife supported devices to node red. How ever you will have to enroll these devices via smartlife-air mobile app. ",
+  "version": "0.0.7",
+  "description": "DONOT USE YET,MOBILE APP IS STILL PENDING APPROVAL. Allow you to intigrate any tuya, smartlife supported devices to node red. How ever you will have to enroll these devices via smartlife-air mobile app. ",
   "main": "index.js",
   "scripts": {
     "test": "test"

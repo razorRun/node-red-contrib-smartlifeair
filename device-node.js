@@ -48,7 +48,10 @@ module.exports = function(RED) {
                       payload[code] = data.val()[code].value;
                     });
                   } else {
-                    payload = data.val().value;
+                    payload = outputConverter(
+                      data.val().value,
+                      config.outputConversion
+                    );
                   }
 
                   node.send({
@@ -64,7 +67,7 @@ module.exports = function(RED) {
             }
           });
         }
-      }, 2000);
+      }, 5000);
 
       function inputHandler(inputValue) {
         if (config.selectedDevice && config.selectedInput) {
@@ -85,3 +88,17 @@ module.exports = function(RED) {
   }
   RED.nodes.registerType("device-node", deviceNode);
 };
+
+function outputConverter(input, enable) {
+  if (!JSON.parse(enable)) {
+    return input;
+  }
+  switch (input) {
+    case true:
+      return "ON";
+    case false:
+      return "OFF";
+    default:
+      return input;
+  }
+}
