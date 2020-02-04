@@ -16,12 +16,20 @@
       return this.name || "Device Node";
     },
     oneditprepare: function() {
-      loadDeviceDropDown(
-        this.account,
-        this.selectedDevice,
-        this.selectedInput,
-        this.selectedOutput
-      );
+      let configNode = {};
+      $("#node-input-account").change(ev => {
+        configNode = RED.nodes.node(this.account);
+        if (configNode && configNode.email && configNode.password) {
+          loadDeviceDropDown(
+            configNode,
+            this.selectedDevice,
+            this.selectedInput,
+            this.selectedOutput
+          );
+        } else {
+          console.log("Please fill all the credential information");
+        }
+      });
     }
   });
 </script>
@@ -36,6 +44,8 @@
     <label for="node-input-account">Linked Account</label>
     <input type="text" id="node-input-account" placeholder="Device Node">
   </div>
+  <p><b>NOTE : </b>Due to a limitation in NodeRED you will have to<b> deploy after changes to LINKED ACCOUNT.</b></p>
+  <br>
   <br>
   <p><b>NOTE : </b>Please operate (trigger a status change using device it self or using SmartLife Air app)</p><p>the device at least once before you select it.</p>
   <div class="form-row">
@@ -61,6 +71,12 @@
 
 <script type="text/html" data-help-name="device-node">
   <p>A simple node that allows you to communicate with devices enrolled to SmartLife Air App.</p>
+  <br>
+  <b>How do I get set up?</b>
+  <p>1. Enroll the devices to SmartLife AIR APP (This is a separate app currently under a private link, will become available in mid feb to public).</p>
+  <p>2. Create an account under <a href="https://smartlife-air.web.app/"> smartlife-air.web.app</a> and add your SmartLife air credentials.</p>
+  <p>3. Install NodeRed node and add your <a href="https://smartlife-air.web.app/"> smartlife-air.web.app</a> Login credentials.</p>
+  <p>4. Choose the device, input and output. (Please change a status before you select the device, Backend has to receive at least one update in order to pop up in the list).</p>
 </script>
 
 <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
@@ -79,13 +95,17 @@
     measurementId: "G-YHBTVPG19R"
   };
 
+  const reload = () => {
+    console.log("Reload");
+  };
+
   const loadDeviceDropDown = (
-    account,
+    configNode,
     selectedDevice,
     selectedInput,
     selectedOutput
   ) => {
-    let configNode = RED.nodes.node(account); // Get the config node
+    // Get the config node
     deviceSelectionEl = $("#node-input-selectedDevice");
     deviceSelectionEl.append('<option value="">Loading...</option>');
 
@@ -146,8 +166,8 @@
             });
             if (selectedDevice) {
               deviceSelectionEl.val(selectedDevice);
-              deviceSelectionEl.trigger("change");
             }
+            deviceSelectionEl.trigger("change");
           }
         });
       } else {

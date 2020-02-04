@@ -22,7 +22,7 @@ module.exports = function(RED) {
 
     // Initialize Firebase
 
-    if (!firebase.apps.length) {
+    if (!firebase.apps.length && n.email && n.password) {
       firebase.initializeApp(firebaseConfig);
       this.auth = firebase.auth();
       this.db = firebase.database();
