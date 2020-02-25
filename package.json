@@ -1,22 +1,24 @@
 {
   "name": "node-red-contrib-smartlifeair",
-  "version": "0.0.7",
-  "description": "DONOT USE YET,MOBILE APP IS STILL PENDING APPROVAL. Allow you to intigrate any tuya, smartlife supported devices to node red. How ever you will have to enroll these devices via smartlife-air mobile app. ",
+  "version": "0.0.12",
+  "description": "Allow you to intigrate any tuya, smartlife supported devices to node red. How ever you will have to enroll these devices via smartlife-air mobile app. https://www.smartlife.nz/#smartlife-air-android-ios  ",
   "main": "index.js",
   "scripts": {
     "test": "test"
   },
   "keywords": [
     "smartlifeair",
-    "node-red"
+    "node-red",
+    "smartlife",
+    "tuya"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://roshan_osh@bitbucket.org/roshan_osh/smartlife-air-node-red.git"
+    "url": "git+https://github.com/razorRun/node-red-contrib-smartlifeair.git/"
   },
   "author": "Roshan Milinda",
   "license": "GPL (GPLv3)",
-  "homepage": "https://bitbucket.org/roshan_osh/smartlife-air-node-red#readme",
+  "homepage": "https://github.com/razorRun/node-red-contrib-smartlifeair.git/#readme",
   "dependencies": {
     "firebase": "^7.8.0"
   },

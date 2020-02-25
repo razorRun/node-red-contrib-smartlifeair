@@ -53,12 +53,15 @@
     <label for="node-input-selectedDevice"> Select Device</label>
     <select id="node-input-selectedDevice" name="node-input-selectedDevice">
     </select>
+    <button onclick="refreshList()">Refresh</button>
   </div>
   <br>
   <div class="form-row">
     <label for="node-input-selectedInput"> Select Input</label>
     <select id="node-input-selectedInput" name="node-input-selectedInput">
     </select>
+    <button onclick="refreshChannels()">Refresh Channels</button>
+    <p></p>
   </div>
   <br>
   <div class="form-row">
@@ -76,15 +79,20 @@
       <option value="false">NO</option>
     </select>
   </div>
+  <br>
+  <br>
+  <p id="smartlife-air-outputMessage"> </p>
 </script>
 
 <script type="text/html" data-help-name="device-node">
   <p>A simple node that allows you to communicate with devices enrolled to SmartLife Air App.</p>
   <br>
   <b>How do I get set up?</b>
-  <p>1. Enroll the devices to SmartLife AIR APP (This is a separate app currently under a private link, will become available in mid feb to public).</p>
-  <p>2. Create an account under <a href="https://smartlife-air.web.app/"> smartlife-air.web.app</a> and add your SmartLife air credentials.</p>
-  <p>3. Install NodeRed node and add your <a href="https://smartlife-air.web.app/"> smartlife-air.web.app</a> Login credentials.</p>
+  <p>1. Enroll the devices to Smart Life AIR APP <a href="https://smartlife-air-plugins.smartlife.nz/">Smartlife Air Home Automation Company's App</a>.
+     But this will work with any tuya or smart life device (If any device not working updated the firmware from app-> device -> update firmware).
+  </p>
+  <p>2. Create an account under <a href="https://smartlife-air-plugins.smartlife.nz/"> Smart Life Smart Home linker App</a> and add your SmartLife air credentials.</p>
+  <p>3. Install NodeRed node and add your <a href="https://smartlife-air-plugins.smartlife.nz/"> Smart Life Smart Home linker App</a> Login credentials.</p>
   <p>4. Choose the device, input and output. (Please change a status before you select the device, Backend has to receive at least one update in order to pop up in the list).</p>
 </script>
 
@@ -127,17 +135,18 @@
         console.log(error.message);
       });
 
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // User is signed in.
         console.log("User Authenticated as " + user.email);
+        this.userID = user.uid;
 
         //DB USER PATHS
         let userDevicesPath = firebase
           .database()
           .ref("/users/" + user.uid + "/smartlifeAirUserDevices");
-
-        userDevicesPath.once("value").then(data => {
+        userDevicesPath.off();
+        userDevicesPath.on("value", data => {
           deviceSelectionEl.children().remove();
           deviceList = data.val();
 
@@ -157,11 +166,12 @@
             });
             // Register listener to listen to device dropdown
             deviceSelectionEl.change(e => {
-              if (deviceSelectionEl.val()) {
+              this.selectedDeviceId = deviceSelectionEl.val();
+              if (this.selectedDeviceId) {
                 //Firebase reference to selected device
                 let devicePath = firebase
                   .database()
-                  .ref("/devices/" + deviceSelectionEl.val());
+                  .ref("/devices/" + this.selectedDeviceId);
 
                 devicePath.once("value").then(data => {
                   loadInputs(data.val(), selectedInput);
@@ -207,6 +217,30 @@
       // Functions list is empty
       selectedInputEl.append('<option value="">No Available Inputs</option>');
     }
+  }
+
+  function refreshList() {
+    if (this.userID) {
+      firebase
+        .database()
+        .ref("/users/" + this.userID + "/smartlifeair/refreshAccountPending")
+        .set(true);
+    }
+  }
+  function refreshChannels() {
+    if (this.selectedDeviceId) {
+      firebase
+        .database()
+        .ref("/devices/" + this.selectedDeviceId + "/refreshNeeded")
+        .set(false)
+        .then(() => {
+          firebase
+            .database()
+            .ref("/devices/" + this.selectedDeviceId + "/refreshNeeded")
+            .set(true);
+        });
+    }
+    $("#node-input-selectedDevice").trigger("change");
   }
 
   //Load Output drop down
