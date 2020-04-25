@@ -13,9 +13,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - name: Set Git Environment and Update package number
+        run: |
+          git config --global user.name 'GIT Package Updater'
+          git config --global user.email 'razorRun@users.noreply.github.com'
+          npm version patch
+          git push
       - run: npm ci
-      - run: npm version patch
-      - run: git push
 
   publish-npm:
     needs: build
