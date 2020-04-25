@@ -8,17 +8,17 @@
       selectedDevice: { value: "", required: true },
       selectedInput: { value: "", required: false },
       selectedOutput: { value: "", required: false },
-      outputConversion: { value: "true", required: true }
+      outputConversion: { value: "true", required: true },
     },
     inputs: 1,
     outputs: 1,
     icon: "light.png",
-    label: function() {
+    label: function () {
       return this.name || "Device Node";
     },
-    oneditprepare: function() {
+    oneditprepare: function () {
       let configNode = {};
-      $("#node-input-account").change(ev => {
+      $("#node-input-account").change((ev) => {
         configNode = RED.nodes.node(this.account);
         if (configNode && configNode.email && configNode.password) {
           loadDeviceDropDown(
@@ -31,7 +31,7 @@
           console.log("Please fill all the credential information");
         }
       });
-    }
+    },
   });
 </script>
 
@@ -88,7 +88,7 @@
   <p>A simple node that allows you to communicate with devices enrolled to SmartLife Air App.</p>
   <br>
   <b>How do I get set up?</b>
-  <p>1. Enroll the devices to Smart Life AIR APP <a href="https://smartlife-air-plugins.smartlife.nz/">Smartlife Air Home Automation Company's App</a>.
+  <p>1. Enroll the devices to Smart Life AIR APP <a href="https://www.smartlife.nz/smartlife-air#store-links">Smartlife Air Home Automation Company's App</a>.
      But this will work with any tuya or smart life device (If any device not working updated the firmware from app-> device -> update firmware).
   </p>
   <p>2. Create an account under <a href="https://smartlife-air-plugins.smartlife.nz/"> Smart Life Smart Home linker App</a> and add your SmartLife air credentials.</p>
@@ -109,7 +109,7 @@
     storageBucket: "smartlife-air.appspot.com",
     messagingSenderId: "121967033816",
     appId: "1:121967033816:web:222bbc68de21111ac0c6ad",
-    measurementId: "G-YHBTVPG19R"
+    measurementId: "G-YHBTVPG19R",
   };
 
   function loadDeviceDropDown(
@@ -130,12 +130,12 @@
     firebase
       .auth()
       .signInWithEmailAndPassword(configNode.email, configNode.password)
-      .catch(error => {
+      .catch((error) => {
         // Handle Errors here.
         console.log(error.message);
       });
 
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // User is signed in.
         console.log("User Authenticated as " + user.email);
@@ -146,14 +146,14 @@
           .database()
           .ref("/users/" + user.uid + "/smartlifeAirUserDevices");
         userDevicesPath.off();
-        userDevicesPath.on("value", data => {
+        userDevicesPath.on("value", (data) => {
           deviceSelectionEl.children().remove();
           deviceList = data.val();
 
           if (Object.keys(deviceList).length === 0) {
             deviceSelectionEl.append('<option value="">No devices</option>');
           } else {
-            Object.keys(deviceList).forEach(deviceId => {
+            Object.keys(deviceList).forEach((deviceId) => {
               deviceSelectionEl.append(
                 '<option value="' +
                   deviceId +
@@ -165,7 +165,7 @@
               );
             });
             // Register listener to listen to device dropdown
-            deviceSelectionEl.change(e => {
+            deviceSelectionEl.change((e) => {
               this.selectedDeviceId = deviceSelectionEl.val();
               if (this.selectedDeviceId) {
                 //Firebase reference to selected device
@@ -173,7 +173,7 @@
                   .database()
                   .ref("/devices/" + this.selectedDeviceId);
 
-                devicePath.once("value").then(data => {
+                devicePath.once("value").then((data) => {
                   loadInputs(data.val(), selectedInput);
                   loadOutputs(data.val(), selectedOutput);
                 });
@@ -196,7 +196,7 @@
     selectedInputEl = $("#node-input-selectedInput");
     selectedInputEl.children().remove();
     if (inputs && inputs.functions) {
-      Object.keys(inputs.functions).forEach(code => {
+      Object.keys(inputs.functions).forEach((code) => {
         selectedInputEl.append(
           '<option value="' +
             code +
@@ -248,7 +248,7 @@
     selectedOutputEl = $("#node-input-selectedOutput");
     selectedOutputEl.children().remove();
     if (outputs && outputs.status) {
-      Object.keys(outputs.status).forEach(code => {
+      Object.keys(outputs.status).forEach((code) => {
         selectedOutputEl.append(
           '<option value="' +
             code +
