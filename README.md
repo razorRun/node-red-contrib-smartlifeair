@@ -4,7 +4,7 @@
 
 This npm module will allow you to link up Smartlife and Tuya devices with node red via firebase.
 
-- 0.0.12
+- 0.0.20
 
 ### How do I get set up?
 
