@@ -8,7 +8,10 @@ This npm module will allow you to link up Smartlife and Tuya devices with node r
 
 ### How do I get set up?
 
-1. Enroll the devices to <b>SmartLife AIR APP</b> -  Please choose <b>New Zealand</b> as the country when you register (This is a separate app but you can use all the devices that works with tuya and smart life. If any device not working updated the firmware from app-> device -> update firmware https://www.smartlife.nz/smartlife-labs ).
+1. Enroll the devices to <b>SmartLife AIR APP</b> -  Please choose <b>New Zealand</b> as the country when you register (This is a separate app but you can use all the devices that works with tuya and smart life. If your device is not working or does not show inputs/outputs, try updating the firmware from app-> device -> update firmware)
+
+ * <b>Download SmartLife AIR APP</b> from Smartlife site, [One of the leading home automation companies in New Zealand](https://www.smartlife.nz/smartlife-labs).
+
 2. Create an account under https://smartlife-air-plugins.smartlife.nz/ and add your SmartLife air credentials.
 3. Install NodeRed node and add your https://smartlife-air-plugins.smartlife.nz/ Login credentials.
 4. Choose the device, input and output. (Please change a status before you select the device, Backend has to receive at least one update in order to pop up in the list).
