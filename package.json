@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-smartlifeair",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "description": "Allow you to intigrate any tuya, smartlife supported devices to node red. How ever you will have to enroll these devices via smartlife-air mobile app. https://www.smartlife.nz/smartlife-air#store-links ",
   "main": "index.js",
   "scripts": {
