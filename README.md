@@ -18,39 +18,11 @@ This npm module will allow you to link up Smartlife and Tuya devices with node r
 
 ### More on Country limitation 
 
-There is one limitation on this plugin due to the server location. This node-red plugin only talks to US DB. That’s mean you will have to choose a country that belongs to **US region when you sign up to the mobile app**. Unfortunately, if you have already created an account you will have to create a new one and enrol devices again.
+There is one limitation on this plugin due to the server location. This node-red plugin only talks to US DB. That’s mean you will have to **choose a country that belongs to US region when you sign up to the mobile app**. Unfortunately, if you have already created an account you will have to create a new one and enrol devices again.
 
-Countries in the US region
 
-Canada
-The United States
-Peru
-Mexico
-Argentina
-Brazil
-Chile
-Colombia
-Venezuela
-Malaysia
-Indonesia
-Philippines
-New Zealand
-Thailand
-Japan
-Korea
-Vietnam
-Myanmar(Burma)
-Guatemala
-Bolivia
-Ecuador
-Paraguay
-Suriname
-Uruguay
-Hongkong SAR China
-Macao SAR China
-Taiwan China
-Puerto Rico
-Curacao
+**Countries in the US region**
+Canada, The United States, Peru, Mexico, Argentina, Brazil, Chile, Colombia, Venezuela, Malaysia, Indonesia, Philippines, New Zealand, Thailand, Japan, Korea, Vietnam, Myanmar(Burma), Guatemala, Bolivia, Ecuador, Paraguay, Suriname, Uruguay, Hongkong SAR China, Macao SAR China, Taiwan China, Puerto Rico, Curacao
 
 
 ### Contribution guidelines
