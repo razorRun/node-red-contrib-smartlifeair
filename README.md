@@ -6,6 +6,8 @@ This npm module will allow you to link up Smartlife and Tuya devices with node r
 
 ### How do I get set up?
 
+### Please DO NOT use support email in app store to reach for support. Log issues and support requests on github. 
+
 1. <b>NOTE: This plugin is only conncted to our US DB, So please choose US (see the list below) on the app when you register.</b> Enroll the devices to <b>SmartLife AIR APP</b> (This is a separate app but you can use all the devices that works with tuya and smart life. If your device is not working or does not show inputs/outputs, try updating the firmware from app-> device -> update firmware)
 
 - <b>Download SmartLife AIR APP</b> from Smartlife site, [One of the leading home automation companies in New Zealand](https://www.smartlife.nz/smartlife-labs).
