@@ -1,5 +1,6 @@
 module.exports = function(RED) {
   function deviceNode(config) {
+    let lastOutPut = {};
     try {
       RED.nodes.createNode(this, config);
       const node = this;
@@ -53,7 +54,7 @@ module.exports = function(RED) {
                       config.outputConversion
                     );
                   }
-
+                  lastOutPut = payload;
                   node.send({
                     payload: payload,
                     completeData: data.val()
@@ -75,16 +76,23 @@ module.exports = function(RED) {
       }
 
       function inputHandler(inputValue) {
-        if (config.selectedDevice && config.selectedInput) {
-          const inputPath = configNode.db.ref(
-            "/devices/" + config.selectedDevice + "/commands"
-          );
-          inputPath.set({
-            commandCode: config.selectedInput,
-            value: inputValue
-          });
-        } else {
-          logWarn("Please select a device and an input channel");
+        if (inputValue === "?"){
+          node.send({
+            payload:lastOutPut
+          })
+        }
+        else {
+          if (config.selectedDevice && config.selectedInput) {
+            const inputPath = configNode.db.ref(
+              "/devices/" + config.selectedDevice + "/commands"
+            );
+            inputPath.set({
+              commandCode: config.selectedInput,
+              value: inputValue
+            });
+          } else {
+            logWarn("Please select a device and an input channel");
+          }
         }
       }
     } catch (error) {

@@ -15,6 +15,7 @@ This npm module will allow you to link up Smartlife and Tuya devices with node r
 2. Create an account under https://smartlife-air-plugins.smartlife.nz/ and add your SmartLife air credentials.
 3. Install NodeRed node and add your https://smartlife-air-plugins.smartlife.nz/ Login credentials.
 4. Choose the device, input and output. (Please change a status before you select the device, Backend has to receive at least one update in order to pop up in the list).
+5. If you want to get last status without sending a command, you can do that by sending string "?" as a input
 
 ### More on Country limitation
 
