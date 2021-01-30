@@ -25,7 +25,7 @@ module.exports = function(RED) {
           configNode.auth.onAuthStateChanged(user => {
             if (user) {
               // User is signed in.
-              node.warn("User Authenticated as " + user.email);
+              logWarn("User Authenticated as " + user.email);
               auth = true;
               if (config.selectedOutput) {
                 if (config.selectedOutput == "root") {
@@ -68,6 +68,11 @@ module.exports = function(RED) {
           });
         }
       }, 5000);
+      function logWarn(msg){
+        if(config.enabledDebugMsg){
+          node.warn(msg);
+        }
+      }
 
       function inputHandler(inputValue) {
         if (config.selectedDevice && config.selectedInput) {
@@ -79,7 +84,7 @@ module.exports = function(RED) {
             value: inputValue
           });
         } else {
-          node.warn("Please select a device and an input channel");
+          logWarn("Please select a device and an input channel");
         }
       }
     } catch (error) {
