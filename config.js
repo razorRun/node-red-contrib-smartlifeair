@@ -27,24 +27,27 @@ module.exports = function(RED) {
     if (n.email && n.password) {
       this.auth = firebase.auth();
       this.db = firebase.database();
-      this.auth.signInWithEmailAndPassword(n.email, n.password).catch(error => {
-        // Handle Errors here.
-        console.log(error.message);
-      });
-
-      /*
+      let retry = true;
+      const login = ()=>{
+        if(retry)
+          this.auth.signInWithEmailAndPassword(n.email, n.password).catch(error => {
+          // Handle Errors here.
+          console.log("Smartlife Air: Auth Error From Config Node")
+          console.log(error.message);
+          retry = true;
+          setTimeout(() => {
+            login();
+          }, 10000);
+        });
+      }
       this.auth.onAuthStateChanged(function(user) {
         if (user) {
-          // User is signed in.
-
-          console.log(user.uid);
-
-          // ...
+          retry = false;
         } else {
-          // User is signed out.
+          retry = true;
+          login();
         }
       });
-      */
     }
   }
   RED.nodes.registerType("smartlifeair-login", loginNode);

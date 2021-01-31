@@ -1,18 +1,19 @@
 module.exports = function(RED) {
+  let lastOutPut = {};
+  let auth = false;
   function deviceNode(config) {
-    let lastOutPut = {};
     try {
       RED.nodes.createNode(this, config);
       const node = this;
       const configNode = RED.nodes.getNode(config.account);
-      let auth = false;
+      
       let outputPath = {};
 
       node.on("input", msg => {
         if (auth) {
           inputHandler(msg.payload);
         } else {
-          node.warn("Authentication Pending or error in user credentials.");
+          node.warn("Authentication Pending or error in user credentials. - On User input");
         }
       });
 
@@ -20,7 +21,7 @@ module.exports = function(RED) {
         if (outputPath) outputPath.off();
       });
 
-      // Subscribe after 2 seconds
+      // Subscribe after 5 seconds
       setTimeout(() => {
         if (configNode && configNode.auth && configNode.db) {
           configNode.auth.onAuthStateChanged(user => {
@@ -63,12 +64,15 @@ module.exports = function(RED) {
               }
             } else {
               // User is signed out.
-              node.warn("Authentication Pending or error in user credentials.");
+              node.warn("Authentication Pending or error in user credentials. - On Startup");
+              console.log("Smartlife Air: Auth Object")
+              console.log(JSON.stringify(configNode.auth))
               auth = false;
             }
           });
         }
       }, 5000);
+
       function logWarn(msg){
         if(config.enabledDebugMsg){
           node.warn(msg);
@@ -86,10 +90,17 @@ module.exports = function(RED) {
             const inputPath = configNode.db.ref(
               "/devices/" + config.selectedDevice + "/commands"
             );
+            console.log('Smartlife Air: Value Update Started'+ config.selectedDevice +' '+ config.selectedInput +' '+ inputValue);
             inputPath.set({
               commandCode: config.selectedInput,
               value: inputValue
+            }).then(function() {
+              console.log('Smartlife Air: Value Update Finished'+ config.selectedDevice +' '+ config.selectedInput +' '+ inputValue);
+            }).catch(function(error) {
+              console.log('Smartlife Air: Cannot connect to the server');
+              console.log('Smartlife Air: Value Update Failed '+ config.selectedDevice +' '+ config.selectedInput +' '+ inputValue);
             });
+
           } else {
             logWarn("Please select a device and an input channel");
           }
@@ -99,6 +110,7 @@ module.exports = function(RED) {
       node.warn(error);
     }
   }
+
   RED.nodes.registerType("device-node", deviceNode);
 };
 
