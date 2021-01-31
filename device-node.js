@@ -74,7 +74,7 @@ module.exports = function(RED) {
       }, 5000);
 
       function logWarn(msg){
-        if(config.enabledDebugMsg){
+        if(config.enabledDebugMsg === "true" || config.enabledDebugMsg === true){ // "WTF: NR keep passing string and Bool cov doesnt work To check later"
           node.warn(msg);
         }
       }

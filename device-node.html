@@ -8,8 +8,8 @@
       selectedDevice: { value: "", required: true },
       selectedInput: { value: "", required: false },
       selectedOutput: { value: "", required: false },
-      outputConversion: { value: "true", required: true },
-      enabledDebugMsg: { value: "true", required: true },
+      outputConversion: { value: true, required: true },
+      enabledDebugMsg: { value: true, required: true },
     },
     inputs: 1,
     outputs: 1,
@@ -76,16 +76,16 @@
   <div class="form-row">
     <label for="node-input-outputConversion"> Convert true/false to ON/OFF</label>
     <select id="node-input-outputConversion" name="node-input-outputConversion">
-      <option value="true">YES</option>
-      <option value="false">NO</option>
+      <option value=true>YES</option>
+      <option value=false>NO</option>
     </select>
   </div>
   <br>
   <div class="form-row">
     <label for="node-input-enabledDebugMsg"> Enable/Disable Debug Messages</label>
     <select id="node-input-enabledDebugMsg" name="node-input-enabledDebugMsg">
-      <option value="true">YES</option>
-      <option value="false">NO</option>
+      <option value=true>YES</option>
+      <option value=false>NO</option>
     </select>
   </div>
   <br>
