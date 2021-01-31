@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-smartlifeair",
   "version": "1.0.11",
-  "description": "Allow you to intigrate any tuya, smartlife supported devices to node red. How ever you will have to enroll these devices via smartlife-air mobile app. https://www.smartlife.nz/smartlife-air#store-links ",
+  "description": "NO NEED of Firmware changes or COMMAND LINE configurations. A simple NR node that works with almost any Smartlife and Tuya device. Read the instructions properly to save time. ",
   "main": "index.js",
   "scripts": {
     "test": "test"
