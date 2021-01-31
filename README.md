@@ -2,7 +2,7 @@
 
 ### Quick summary -
 
-This npm module will allow you to link up Smartlife and Tuya devices with node red via a cloud service without any firmware chnages.
+This npm module will allow you to link up Smartlife and Tuya devices with node red via a **cloud service without any firmware changes**.
 
 ### How do I get set up?
 
