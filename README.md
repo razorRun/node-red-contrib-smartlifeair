@@ -33,5 +33,3 @@ Canada, The United States, Peru, Mexico, Argentina, Brazil, Chile, Colombia, Ven
 * Author - Roshan Milinda -> [roshan.digital](https://roshan.digital/)
 
 ### license GPL (GPLv3)
-
-sudo apt install libavahi-compat-libdnssd-dev
